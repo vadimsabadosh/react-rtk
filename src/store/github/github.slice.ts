@@ -1,29 +1,28 @@
-import {createSlice, PayloadAction} from '@reduxjs/toolkit'
-
-const LS_FAV_KEY = 'rfk'
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 interface GithubState {
-  favourites: string[]
+	favorites: string[];
 }
+
+const LS_FAV_KEY = "git_fk";
 
 const initialState: GithubState = {
-  favourites: JSON.parse(localStorage.getItem(LS_FAV_KEY) ?? '[]')
-}
+	favorites: JSON.parse(localStorage.getItem(LS_FAV_KEY) ?? "[]"),
+};
 
 export const githubSlice = createSlice({
-  name: 'github',
-  initialState,
-  reducers: {
-    addFavourite(state, action: PayloadAction<string>) {
-      state.favourites.push(action.payload)
-      localStorage.setItem(LS_FAV_KEY, JSON.stringify(state.favourites))
-    },
-    removeFavourite(state, action: PayloadAction<string>) {
-      state.favourites = state.favourites.filter(f => f !== action.payload)
-      localStorage.setItem(LS_FAV_KEY, JSON.stringify(state.favourites))
-    }
-  }
-})
+	name: "github",
+	initialState,
+	reducers: {
+		addFavorite(state: GithubState, action: PayloadAction<string>) {
+			state.favorites.push(action.payload);
+			localStorage.setItem(LS_FAV_KEY, JSON.stringify(state.favorites));
+		},
+		removeFavorite(state: GithubState, action: PayloadAction<string>) {
+			state.favorites = state.favorites.filter((f) => f !== action.payload);
+		},
+	},
+});
 
-export const githubActions = githubSlice.actions
-export const githubReducer = githubSlice.reducer
+export const githubActions = githubSlice.actions;
+export const githubReducer = githubSlice.reducer;

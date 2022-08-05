@@ -1,12 +1,8 @@
-import {useDispatch} from 'react-redux'
-import {bindActionCreators} from '@reduxjs/toolkit'
-import {githubActions} from '../store/github/github.slice'
-
-const actions = {
-  ...githubActions
-}
+import { bindActionCreators } from "@reduxjs/toolkit";
+import { useDispatch } from "react-redux";
+import { githubActions } from "src/store/github/github.slice";
 
 export const useActions = () => {
-  const dispatch = useDispatch()
-  return bindActionCreators(actions, dispatch)
-}
+	const dispatch = useDispatch();
+	return bindActionCreators(githubActions, dispatch);
+};

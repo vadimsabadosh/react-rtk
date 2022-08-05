@@ -1,46 +1,56 @@
-import React, {useState} from 'react'
-import {IRepo} from '../models/models'
-import {useActions} from '../hooks/actions'
-import {useAppSelector} from '../hooks/redux'
+import React from "react";
+import { useActions } from "src/hooks/actions";
+import { useAppSelector } from "src/hooks/redux";
+import { IRepo } from "src/types/types";
 
-export function RepoCard({ repo }: { repo: IRepo }) {
-  const {addFavourite, removeFavourite} = useActions()
-  const {favourites} = useAppSelector(state => state.github)
+const RepoCard = ({ repo }: { repo: IRepo }) => {
+	const { addFavorite, removeFavorite } = useActions();
+	const favs = useAppSelector((state) => state.github.favorites);
 
-  const [isFav, setIsFav] = useState(favourites.includes(repo.html_url))
-  
-  const addToFavourite = (event: React.MouseEvent<HTMLButtonElement>) => {
-    event.preventDefault()
-    addFavourite(repo.html_url)
-    setIsFav(true)
-  }
+	const addToFav = (event: React.MouseEvent<HTMLButtonElement>) => {
+		event.preventDefault();
+		addFavorite(repo.html_url);
+	};
+	const removeFromFavorite = (event: React.MouseEvent<HTMLButtonElement>) => {
+		event.preventDefault();
+		removeFavorite(repo.html_url);
+	};
 
-  const removeFromFavourite = (event: React.MouseEvent<HTMLButtonElement>) => {
-    event.preventDefault()
-    removeFavourite(repo.html_url)
-    setIsFav(false)
-  }
-  
-  return (
-    <div className="border py-3 px-5 rounded mb-2 hover:shadow-md hover:bg-gray-100 transition-all">
-      <a href={repo.html_url} target="_blank">
-        <h2 className="text-lg font-bold">{repo.full_name}</h2>
-        <p className="text-sm">
-          Forks: <span className="font-bold mr-2">{repo.forks}</span>
-          Watchers: <span className="font-bold">{repo.watchers}</span>
-        </p>
-        <p className="text-sm font-thin">{repo?.description}</p>
+	return (
+		<div className="border py-3 px-5 rounded mb-2 hover:shadow-md hover:bg-gray-100 transition-all">
+			<a
+				className="text-lg font-bold text-pink-900"
+				target="_blank"
+				href={repo.html_url}
+				rel="noreferrer"
+			>
+				{repo.full_name}
+			</a>
+			<p className="text-sm">
+				Forks: <span className="font-bold">{repo.forks}</span> | Watchers:{" "}
+				<span className="font-bold">{repo.watchers}</span>
+			</p>
+			<p className="text-sm font-thin">{repo?.description}</p>
+			<p className="text-sm font-bold color-gray mb-4">
+				Clone link: {repo.git_url}
+			</p>
+			{favs.includes(repo.html_url) ? (
+				<button
+					className="py-2 px-4 bg-rose-900 rounded hover:shadow-md transition-all text-white"
+					onClick={removeFromFavorite}
+				>
+					Remove From Favorite
+				</button>
+			) : (
+				<button
+					className="py-2 px-4 bg-yellow-400 rounded hover:shadow-md transition-all"
+					onClick={addToFav}
+				>
+					Add
+				</button>
+			)}
+		</div>
+	);
+};
 
-        {!isFav && <button
-          className="py-2 px-4 bg-yellow-400 mr-2 rounded hover:shadow-md transition-all"
-          onClick={addToFavourite}
-        >Add</button>}
-
-        {isFav && <button
-          className="py-2 px-4 bg-red-400 rounded hover:shadow-md transition-all"
-          onClick={removeFromFavourite}
-        >Remove</button>}
-      </a>
-    </div>
-  )
-}
+export default RepoCard;
